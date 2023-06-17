@@ -40,15 +40,7 @@ const DataAppend = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.post("/api/tibco/ems/get/queue", {
-        data_name: "",
-        ems_server_name: "",
-        fab_cd: "D11",
-        fab_loc_cd: "이천",
-        st_dt: "2023-04-28T01:00:19.248Z",
-        en_dt: "2023-05-30T17:32:20.000Z",
-        scroll_size: limit + offset,
-      });
+      const response = await axios.post("", {});
 
       const jsonData: TableDataItem[] = response.data.data
         .slice(offset, offset + limit) // 데이터 범위 조정
