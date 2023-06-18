@@ -94,6 +94,16 @@ const SimpleDropdown = () => {
                     }}
                     onClick={handleConfirm}
                   >
+                    확인
+                  </button>
+                  <button
+                    style={{
+                      backgroundColor: "pink",
+                      borderRadius: 10,
+                      width: 80,
+                    }}
+                    onClick={() => setSelectedOptions(OptionList)}
+                  >
                     all apply
                   </button>
                   <button
