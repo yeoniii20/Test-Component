@@ -47,7 +47,7 @@ const initialData: TableDataItem[] = [
   },
 ];
 
-const SingleTabulatorDropdown = () => {
+const MultiBothSearchDropdown = () => {
   const tableRef = useRef<ReactTabulator | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedData, setSelectedData] = useState<TableDataItem[]>([]);
@@ -55,7 +55,7 @@ const SingleTabulatorDropdown = () => {
 
   console.log(selectedData);
 
-  // 선택한 서버에 대한 변수
+  //   선택한 서버에 대한 변수
   const selectedServerNames = selectedData.map((option) => option.server);
   const selectedServerCount = selectedData.length;
 
@@ -63,36 +63,15 @@ const SingleTabulatorDropdown = () => {
     {
       title: "",
       width: 40,
-      formatter: (cell: CellComponent) => {
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.addEventListener("change", () => {
-          const row = cell.getRow();
-          const isChecked = checkbox.checked;
-
-          if (isChecked) {
-            const selectedRows = tableRef.current?.table.getSelectedRows();
-            if (selectedRows) {
-              selectedRows.forEach((selectedRow: RowComponent) => {
-                const selectedCheckbox = selectedRow
-                  .getElement()
-                  .querySelector("input[type='checkbox']");
-                if (selectedCheckbox && selectedCheckbox !== checkbox) {
-                  (selectedCheckbox as HTMLInputElement).checked = false;
-                  selectedRow.toggleSelect();
-                }
-              });
-            }
-          }
-
-          row.toggleSelect();
-        });
-
-        return checkbox;
-      },
+      formatter: "rowSelection",
+      titleFormatter: "rowSelection",
       hozAlign: "center",
       headerSort: false,
       cssClass: "text-center",
+      cellClick: function (cell: CellComponent) {
+        const row = cell.getRow();
+        row.toggleSelect();
+      },
     },
     { title: "server", field: "server", hozAlign: "center" },
   ];
@@ -119,6 +98,8 @@ const SingleTabulatorDropdown = () => {
     placeholder: "검색된 데이터가 없습니다.",
   };
 
+  // 데이터 확인용 alert 추가
+  // 체크박스 선택 여부에 따라 selectedData 배열 업데이트
   const handleConfirm = () => {
     const selectedRows = tableRef.current?.table.getSelectedRows() || [];
     const selectedCount = selectedRows.length;
@@ -140,9 +121,7 @@ const SingleTabulatorDropdown = () => {
       setSelectedData([]);
       alert("No servers selected");
     }
-
     setDropdownMenu(false);
-
     console.log(selectedData);
   };
 
@@ -152,7 +131,7 @@ const SingleTabulatorDropdown = () => {
   };
 
   const handleCancelClick = () => {
-    setSelectedData(initialData);
+    setSelectedData([]);
     setDropdownMenu(false);
   };
 
@@ -162,7 +141,12 @@ const SingleTabulatorDropdown = () => {
   };
 
   const dropdownText =
-    selectedData.length > 0 ? `${selectedServerNames[0]}` : "=== EMS ===";
+    selectedData.length > 0
+      ? `${selectedServerNames[0]}외 ${selectedData.length - 1}건`
+      : "선택한 server가 없습니다";
+
+  const selectedOptionName =
+    selectedData.length === 1 ? selectedData[0].value : "";
 
   // 외부 클릭했을 때 드롭다운 닫히도록 함.
   const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -181,31 +165,55 @@ const SingleTabulatorDropdown = () => {
   }, []);
 
   return (
-    <div ref={dropdownRef as React.RefObject<HTMLDivElement>}>
+    <div
+      style={{ zIndex: 10 }}
+      ref={dropdownRef as React.RefObject<HTMLDivElement>}
+    >
       {/* === 입력 창 === */}
-      <div
-        onClick={handleDropdownVisible}
-        style={{
-          backgroundColor: "lightGrey",
-          width: 150,
-          height: 20,
-          cursor: "pointer",
-        }}
-      >
-        {dropdownText}
+      <div style={{ display: "flex" }}>
+        <input
+          style={{
+            backgroundColor: "lightGrey",
+            width: 120,
+            height: 24,
+          }}
+          type="text"
+          placeholder="Search"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        ></input>
+        <button
+          style={{ width: 56, backgroundColor: "#C9C9C9" }}
+          onClick={() => {
+            setDropdownMenu(true);
+          }}
+        >
+          검색
+        </button>
+        <button
+          onClick={handleDropdownVisible}
+          style={{
+            backgroundColor: "grey",
+            paddingLeft: 4,
+            paddingRight: 4,
+          }}
+        >
+          ▽
+        </button>
       </div>
+
       {/* === 드롭 다운 메뉴 === */}
       <div
         style={{
           position: "absolute",
           backgroundColor: "#E5E5E5",
-          width: 220,
-          // height: 230,
+          width: 200,
           zIndex: 100,
         }}
       >
+        {selectedData.length === 1 ? selectedOptionName : dropdownText}
         {dropdownMenu ? (
-          <div>
+          <div style={{ width: 200, backgroundColor: "#E5E5E5" }}>
             <div>
               {/* === 검색 기능 === */}
               <input
@@ -217,21 +225,24 @@ const SingleTabulatorDropdown = () => {
               />
               <button
                 onClick={clearSearch}
-                style={{ paddingLeft: 4, paddingRight: 4 }}
+                style={{
+                  width: 50,
+                  backgroundColor: "#C9C9C9",
+                }}
               >
                 Clear
               </button>
             </div>
-            {filteredData.length > 0 ? (
-              <div
-                style={{
-                  width: 200,
-                  height: 200,
-                  overflow: "scroll",
-                  overflowX: "hidden",
-                  backgroundColor: "#E5E5E5",
-                }}
-              >
+            <div
+              style={{
+                width: 200,
+                height: 200,
+                overflow: "scroll",
+                overflowX: "hidden",
+                backgroundColor: "#E5E5E5",
+              }}
+            >
+              {filteredData.length > 0 ? (
                 <ReactTabulator
                   ref={tableRef}
                   data={filteredData}
@@ -239,19 +250,18 @@ const SingleTabulatorDropdown = () => {
                   options={options}
                   layout={"fitData"}
                 />
-              </div>
-            ) : (
-              <div style={{ textAlign: "center" }}>
-                <ReactTabulator
-                  ref={tableRef}
-                  data={[]}
-                  columns={columns}
-                  options={noDataOption}
-                  layout={"fitData"}
-                />
-              </div>
-            )}
-            {/* === 확인/취소 버튼 === */}
+              ) : (
+                <div style={{ textAlign: "center" }}>
+                  <ReactTabulator
+                    ref={tableRef}
+                    data={[]}
+                    columns={columns}
+                    options={noDataOption}
+                    layout={"fitData"}
+                  />
+                </div>
+              )}
+            </div>
             <div>
               <button
                 style={{
@@ -283,4 +293,4 @@ const SingleTabulatorDropdown = () => {
   );
 };
 
-export default SingleTabulatorDropdown;
+export default MultiBothSearchDropdown;

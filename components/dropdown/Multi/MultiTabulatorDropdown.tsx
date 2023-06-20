@@ -35,6 +35,16 @@ const initialData: TableDataItem[] = [
     server: "EMS5",
     value: "EMS5",
   },
+  {
+    id: 6,
+    server: "EMS6",
+    value: "EMS6",
+  },
+  {
+    id: 7,
+    server: "EMS7",
+    value: "EMS7",
+  },
 ];
 
 const MultiTabulatorDropdown = () => {
@@ -66,11 +76,6 @@ const MultiTabulatorDropdown = () => {
     { title: "server", field: "server", hozAlign: "center" },
   ];
 
-  // useEffect에서 전체 데이터를 선택한 배열이 반환됨
-  // useEffect(() => {
-  //   setSelectedData(initialData);
-  // }, []);
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -86,6 +91,11 @@ const MultiTabulatorDropdown = () => {
     printAsHtml: true,
     printVisibleRowsOnly: true,
     movableColumns: true,
+  };
+
+  const noDataOption = {
+    layout: "fitColumns",
+    placeholder: "검색된 데이터가 없습니다.",
   };
 
   // 데이터 확인용 alert 추가
@@ -112,14 +122,11 @@ const MultiTabulatorDropdown = () => {
       alert("No servers selected");
     }
     setDropdownMenu(false);
-
-    // 상태 업데이트 이후에 선택한 데이터 출력
     console.log(selectedData);
   };
 
   const handleDropdownVisible = () => {
-    setSelectedData([]);
-    setSearchTerm(""); // 선택 초기화 시 검색어도 초기화
+    setSearchTerm("");
     setDropdownMenu(!dropdownMenu);
   };
 
@@ -128,55 +135,135 @@ const MultiTabulatorDropdown = () => {
     setDropdownMenu(false);
   };
 
+  const clearSearch = () => {
+    setSearchTerm("");
+    tableRef.current?.table.clearFilter();
+  };
+
   const dropdownText =
     selectedData.length > 0
       ? `${selectedServerNames[0]}외 ${selectedData.length - 1}건`
-      : "EMS server를 선택하세요";
+      : "=== EMS ===";
+
+  const selectedOptionName =
+    selectedData.length === 1 ? selectedData[0].value : "";
+
+  // 외부 클릭했을 때 드롭다운 닫히도록 함.
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const handleOutsideClick = (event: { target: any }) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   return (
-    <div>
+    <div
+      style={{ zIndex: 10 }}
+      ref={dropdownRef as React.RefObject<HTMLDivElement>}
+    >
       {/* === 입력 창 === */}
       <div
         onClick={handleDropdownVisible}
-        style={{ backgroundColor: "skyblue", width: 200, cursor: "pointer" }}
+        style={{
+          backgroundColor: "lightGrey",
+          width: 150,
+          height: 20,
+          cursor: "pointer",
+        }}
       >
-        {dropdownText}
+        {selectedData.length === 1 ? selectedOptionName : dropdownText}
       </div>
-      {dropdownMenu ? (
-        <div style={{ width: 200 }}>
-          <div>
-            <input
-              style={{ color: "black" }}
-              type="text"
-              placeholder="Search"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-          </div>
-          <ReactTabulator
-            ref={tableRef}
-            data={filteredData}
-            columns={columns}
-            options={options}
-            layout={"fitData"}
-          />
-          <div>
-            <button
+      {/* === 드롭 다운 메뉴 === */}
+      <div
+        style={{
+          position: "absolute",
+          backgroundColor: "#E5E5E5",
+          width: 200,
+          zIndex: 100,
+        }}
+      >
+        {dropdownMenu ? (
+          <div style={{ width: 200, backgroundColor: "#E5E5E5" }}>
+            <div>
+              {/* === 검색 기능 === */}
+              <input
+                style={{ color: "black", width: 150 }}
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <button
+                onClick={clearSearch}
+                style={{ paddingLeft: 4, paddingRight: 4 }}
+              >
+                Clear
+              </button>
+            </div>
+            <div
               style={{
-                backgroundColor: "pink",
-                borderRadius: 10,
-                width: 80,
+                width: 200,
+                height: 200,
+                overflow: "scroll",
+                overflowX: "hidden",
+                backgroundColor: "#E5E5E5",
               }}
-              onClick={handleConfirm}
             >
-              Confirm
-            </button>
-            <button onClick={handleCancelClick}>Cancel</button>
+              {filteredData.length > 0 ? (
+                <ReactTabulator
+                  ref={tableRef}
+                  data={filteredData}
+                  columns={columns}
+                  options={options}
+                  layout={"fitData"}
+                />
+              ) : (
+                <div style={{ textAlign: "center" }}>
+                  <ReactTabulator
+                    ref={tableRef}
+                    data={[]}
+                    columns={columns}
+                    options={noDataOption}
+                    layout={"fitData"}
+                  />
+                </div>
+              )}
+            </div>
+            <div>
+              <button
+                style={{
+                  backgroundColor: "lightGrey",
+                  borderRadius: 10,
+                  width: 60,
+                }}
+                onClick={handleConfirm}
+              >
+                Confirm
+              </button>
+              <button
+                style={{
+                  backgroundColor: "lightGrey",
+                  borderRadius: 10,
+                  width: 60,
+                }}
+                onClick={handleCancelClick}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div></div>
-      )}
+        ) : (
+          <div></div>
+        )}
+      </div>
     </div>
   );
 };

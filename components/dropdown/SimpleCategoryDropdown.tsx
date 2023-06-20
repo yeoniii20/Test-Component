@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Option {
   id: number;
@@ -23,23 +23,46 @@ const OptionList: Option[] = [
     value: "ems server10",
     category: "Category 5",
   },
+  {
+    id: 11,
+    name: "ems server11",
+    value: "ems server11",
+    category: "Category 5",
+  },
+  {
+    id: 12,
+    name: "ems server12",
+    value: "ems server12",
+    category: "Category 5",
+  },
+  {
+    id: 13,
+    name: "ems server13",
+    value: "ems server13",
+    category: "Category 5",
+  },
 ];
 
 const SimpleCategoryDropdown = () => {
   const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
-  const [selectedCategory, setSelectedCategory] =
-    useState<string>("Category 1"); // 기본값 설정
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([
+    "All",
+  ]);
   const [dropdownMenu, setDropdownMenu] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
 
-  // 선택한 서버에 대한 변수
   const selectedServerNames = selectedOptions.map((option) => option.name);
   const selectedServerCount = selectedOptions.length;
 
-  // 카테고리 목록 생성
-  const categories = Array.from(
-    new Set(OptionList.map((option) => option.category))
-  );
+  // 드롭다운에 어떤 클릭 이벤트가 일어나야만 실행됨.
+  // const handleDropdownBlur = () => {
+  //   setDropdownMenu(false);
+  // };
+
+  const categories = [
+    "All",
+    ...Array.from(new Set(OptionList.map((option) => option.category))),
+  ];
 
   const handleSelectOption = (option: Option) => {
     const isSelected = selectedOptions.some(
@@ -54,8 +77,27 @@ const SimpleCategoryDropdown = () => {
     }
   };
 
+  console.log(selectedCategories);
+
   const handleSelectCategory = (category: string) => {
-    setSelectedCategory(category);
+    if (category === "All") {
+      return ["All"];
+    } else {
+      const updatedCategories = selectedCategories.includes("All")
+        ? [category]
+        : selectedCategories.includes(category)
+        ? selectedCategories.filter((c) => c !== category)
+        : [...selectedCategories, category];
+
+      if (updatedCategories.length === 0) {
+        setSelectedCategories(["All"]);
+      } else if (updatedCategories.length === 5) {
+        // 이 부분은 카테고리 수에 따라 달라짐! api 작업 시 변수로 받아올 예정
+        setSelectedCategories(["All"]);
+      } else {
+        setSelectedCategories(updatedCategories);
+      }
+    }
   };
 
   const handleConfirm = () => {
@@ -75,102 +117,156 @@ const SimpleCategoryDropdown = () => {
     setDropdownMenu(!dropdownMenu);
   };
 
-  const handleAllApply = () => {
-    const categoryOptions = OptionList.filter(
-      (option) => option.category === selectedCategory
-    );
-    setSelectedOptions(categoryOptions);
-  };
-
   const placeholder =
     selectedOptions.length > 0
       ? `${selectedServerNames[0]}외 ${selectedOptions.length - 1}건`
-      : "EMS server를 선택하세요";
+      : "=== EMS ===";
+
+  const selectedOptionName =
+    selectedOptions.length === 1 ? selectedOptions[0].name : "";
+
+  // 외부 클릭했을 때 드롭다운 닫히도록 함.
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const handleOutsideClick = (event: { target: any }) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   return (
     <>
-      <div>
+      <div ref={dropdownRef as React.RefObject<HTMLDivElement>}>
+        {/* === 입력 창 === */}
         <div
           onClick={handleDropdownVisible}
-          style={{ backgroundColor: "skyblue", width: 200, cursor: "pointer" }}
+          style={{
+            backgroundColor: "lightGrey",
+            width: 150,
+            height: 20,
+            cursor: "pointer",
+          }}
         >
-          {placeholder}
+          {selectedOptions.length === 1 ? selectedOptionName : placeholder}
         </div>
-        <div>
-          <div>
-            {dropdownMenu ? (
+        <div
+          // id="dropdown-container"
+          // onBlur={handleDropdownBlur}
+          style={{
+            position: "absolute",
+            backgroundColor: "#E5E5E5",
+            width: 300,
+            zIndex: 100,
+          }}
+        >
+          {dropdownMenu ? (
+            <div>
               <div>
-                {/* 카테고리 버튼 */}
-                <div>
-                  {categories.map((category) => (
-                    <button
-                      key={category}
-                      onClick={() => handleSelectCategory(category)}
-                      style={{
-                        backgroundColor:
-                          selectedCategory === category ? "pink" : "white",
-                        borderRadius: 10,
-                        marginRight: 5,
-                      }}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-                {/* 카테고리별로 옵션을 그룹화하여 출력 */}
-                {OptionList.filter(
-                  (option) => option.category === selectedCategory
-                ).map((option) => (
-                  <div key={option.id}>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={selectedOptions.some(
-                          (selected) => selected.id === option.id
-                        )}
-                        onChange={() => handleSelectOption(option)}
-                      />
-                      {option.name}
-                    </label>
-                  </div>
+                {/* === 드롭 다운 메뉴 === */}
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => handleSelectCategory(category)}
+                    style={{
+                      paddingLeft: 4,
+                      paddingRight: 4,
+                      backgroundColor: selectedCategories.includes(category)
+                        ? "lightGrey"
+                        : "white",
+                      borderRadius: 10,
+                      marginRight: 5,
+                      width: 90,
+                      height: 20,
+                    }}
+                  >
+                    {category}
+                  </button>
                 ))}
-                <div>
-                  <button
-                    style={{
-                      backgroundColor: "pink",
-                      borderRadius: 10,
-                      width: 80,
-                    }}
-                    onClick={handleConfirm}
-                  >
-                    확인
-                  </button>
-                  <button
-                    style={{
-                      backgroundColor: "pink",
-                      borderRadius: 10,
-                      width: 80,
-                    }}
-                    onClick={handleAllApply}
-                  >
-                    all apply
-                  </button>
-                  <button
-                    style={{
-                      backgroundColor: "pink",
-                      borderRadius: 10,
-                      width: 80,
-                    }}
-                    onClick={() => setSelectedOptions([])}
-                  >
-                    all reset
-                  </button>
-                </div>
               </div>
-            ) : (
-              <div></div>
-            )}
-          </div>
+              <div>
+                {OptionList.length > 0 ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: 300,
+                      height: 150,
+                      overflow: "scroll",
+                      overflowX: "hidden",
+                      flexWrap: "wrap",
+                      alignContent: "start",
+                    }}
+                  >
+                    {OptionList.filter(
+                      (option) =>
+                        selectedCategories.includes("All") ||
+                        selectedCategories.includes(option.category)
+                    ).map((option) => (
+                      <div style={{ width: 120, height: 25 }} key={option.id}>
+                        <label>
+                          <input
+                            type="checkbox"
+                            checked={selectedOptions.some(
+                              (selected) => selected.id === option.id
+                            )}
+                            onChange={() => handleSelectOption(option)}
+                          />
+                          {option.name}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div>Data가 존재하지 않습니다.</div>
+                )}
+              </div>
+              {/* === 확인/취소 버튼 === */}
+              <div>
+                <button
+                  style={{
+                    backgroundColor: "lightGrey",
+                    borderRadius: 10,
+                    width: 60,
+                  }}
+                  onClick={handleConfirm}
+                >
+                  확인
+                </button>
+                <button
+                  style={{
+                    backgroundColor: "lightGrey",
+                    borderRadius: 10,
+                    width: 70,
+                  }}
+                  onClick={() => {
+                    setSelectedOptions(OptionList);
+                  }}
+                >
+                  all apply
+                </button>
+                <button
+                  style={{
+                    backgroundColor: "lightGrey",
+                    borderRadius: 10,
+                    width: 60,
+                  }}
+                  onClick={() => {
+                    setSelectedOptions([]);
+                  }}
+                >
+                  all reset
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
       <div>{confirmMessage}</div>
