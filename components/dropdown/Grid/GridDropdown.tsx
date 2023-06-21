@@ -18,15 +18,7 @@ const initialData: TableDataItem[] = [
 const GridDropdown = () => {
   const [selectedData, setSelectedData] = useState<TableDataItem[]>([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    if (selectAll) {
-      setSelectedData(initialData);
-    } else {
-      setSelectedData([]);
-    }
-  }, [selectAll]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleCheckboxChange = (item: TableDataItem) => {
     const isChecked = selectedData.some(
@@ -50,19 +42,6 @@ const GridDropdown = () => {
     setSelectAll(newSelectAll);
     setSelectedData(newSelectAll ? initialData : []);
   };
-
-  useEffect(() => {
-    const dataLength = selectedData.length < initialData.length;
-    if (dataLength) {
-      setSelectAll(false);
-      console.log(selectedData.length);
-      console.log(initialData.length);
-      console.log(dataLength);
-      console.log(selectAll);
-    } else if (selectedData.length === initialData.length) {
-      setSelectAll(true);
-    }
-  }, [selectedData]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -88,7 +67,7 @@ const GridDropdown = () => {
       />
       <table className="w-full border-collapse">
         <thead>
-          <tr>
+          <tr style={{ backgroundColor: "grey" }}>
             <th className="w-12">
               <input
                 type="checkbox"
@@ -96,12 +75,28 @@ const GridDropdown = () => {
                 onChange={handleSelectAllChange}
               />
             </th>
-            <th style={{ color: "black" }}>Server</th>
+            <th
+              className="border-b"
+              colSpan={2}
+              style={{
+                color: "black",
+                paddingLeft: 10,
+                borderLeft: "2px solid black",
+                backgroundColor: "grey",
+              }}
+            >
+              Server
+            </th>
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((item) => (
-            <tr key={item.id}>
+          {filteredData.map((item, index) => (
+            <tr
+              key={item.id}
+              style={{
+                backgroundColor: index % 2 === 0 ? "lightGrey" : "grey",
+              }}
+            >
               <td className="text-center">
                 <input
                   type="checkbox"
@@ -109,21 +104,32 @@ const GridDropdown = () => {
                   onChange={() => handleCheckboxChange(item)}
                 />
               </td>
-              <td style={{ color: "black" }}>{item.server}</td>
+              <td
+                className="border-b"
+                colSpan={2}
+                style={{
+                  color: "black",
+                  paddingLeft: 10,
+                  borderLeft: "2px solid black",
+                }}
+              >
+                {item.server}
+              </td>
             </tr>
           ))}
         </tbody>
+
+        {selectedData.length > 0 && (
+          <div className="mt-4">
+            <h4 style={{ color: "black" }}>Selected Servers:</h4>
+            <ul>
+              {selectedData.map((item) => (
+                <li key={item.id}>{item.server}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </table>
-      {selectedData.length > 0 && (
-        <div className="mt-4">
-          <h4 style={{ color: "black" }}>Selected Servers:</h4>
-          <ul>
-            {selectedData.map((item) => (
-              <li key={item.id}>{item.server}</li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 };
