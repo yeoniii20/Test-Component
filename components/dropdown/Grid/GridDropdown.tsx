@@ -69,7 +69,6 @@ const GridDropdown = () => {
       : "EMS server를 선택하세요";
 
   const handleDropdownVisible = () => {
-    setSelectedData([]);
     setSearchTerm("");
     setDropdownMenu(!dropdownMenu);
   };
@@ -204,16 +203,20 @@ const GridDropdown = () => {
                 </tr>
               ))}
             </tbody>
-            {/* {selectedData.length > 0 && (
-              <div className="mt-4">
-                <h4 style={{ color: "black" }}>Selected Servers:</h4>
-                <ul>
-                  {selectedData.map((item) => (
-                    <li key={item.id}>{item.server}</li>
-                  ))}
-                </ul>
-              </div>
-            )} */}
+            <div>
+              {selectedData.length > 0 && (
+                <div className="mt-4">
+                  <h4 style={{ color: "black" }}>Selected Servers:</h4>
+                  <ul>
+                    {selectedData.map((item) => (
+                      <li style={{ color: "grey" }} key={item.id}>
+                        {item.server}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </table>
         </div>
       ) : (
