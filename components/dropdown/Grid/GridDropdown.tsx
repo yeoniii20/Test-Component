@@ -150,74 +150,76 @@ const GridDropdown = () => {
           >
             Clear
           </button>
-          <table className="w-full border-collapse">
-            <thead>
-              <tr style={{ backgroundColor: "grey" }}>
-                <th className="w-12">
-                  <input
-                    type="checkbox"
-                    checked={selectAll}
-                    onChange={handleSelectAllChange}
-                  />
-                </th>
-                <th
-                  className="border-b"
-                  colSpan={2}
-                  style={{
-                    color: "black",
-                    paddingLeft: 10,
-                    borderLeft: "2px solid black",
-                    backgroundColor: "grey",
-                  }}
-                >
-                  Server
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((item, index) => (
-                <tr
-                  key={item.id}
-                  style={{
-                    backgroundColor: index % 2 === 0 ? "lightGrey" : "grey",
-                  }}
-                >
-                  <td className="text-center">
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr style={{ backgroundColor: "grey" }}>
+                  <th className="w-12">
                     <input
                       type="checkbox"
-                      checked={checkboxChecked(item)}
-                      onChange={() => handleCheckboxChange(item)}
+                      checked={selectAll}
+                      onChange={handleSelectAllChange}
                     />
-                  </td>
-                  <td
+                  </th>
+                  <th
                     className="border-b"
                     colSpan={2}
                     style={{
                       color: "black",
                       paddingLeft: 10,
                       borderLeft: "2px solid black",
+                      backgroundColor: "grey",
                     }}
                   >
-                    {item.server}
-                  </td>
+                    Server
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-            <div>
-              {selectedData.length > 0 && (
-                <div className="mt-4">
-                  <h4 style={{ color: "black" }}>Selected Servers:</h4>
-                  <ul>
-                    {selectedData.map((item) => (
-                      <li style={{ color: "grey" }} key={item.id}>
-                        {item.server}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </table>
+              </thead>
+              <tbody>
+                {filteredData.map((item, index) => (
+                  <tr
+                    key={item.id}
+                    style={{
+                      backgroundColor: index % 2 === 0 ? "lightGrey" : "grey",
+                    }}
+                  >
+                    <td className="text-center">
+                      <input
+                        type="checkbox"
+                        checked={checkboxChecked(item)}
+                        onChange={() => handleCheckboxChange(item)}
+                      />
+                    </td>
+                    <td
+                      className="border-b"
+                      colSpan={2}
+                      style={{
+                        color: "black",
+                        paddingLeft: 10,
+                        borderLeft: "2px solid black",
+                      }}
+                    >
+                      {item.server}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              {/* <div style={{ backgroundColor: "white", height: 210 }}>
+                {selectedData.length > 0 && (
+                  <div className="mt-4">
+                    <h4 style={{ color: "black" }}>Selected Servers:</h4>
+                    <ul>
+                      {selectedData.map((item) => (
+                        <li style={{ color: "grey" }} key={item.id}>
+                          {item.server}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div> */}
+            </table>
+          </div>
         </div>
       ) : (
         <div></div>
