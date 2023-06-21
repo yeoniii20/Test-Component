@@ -90,7 +90,7 @@ const QuickDatePicker = () => {
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", color: "black" }}>
         <DatePicker
           ref={startDatePickerRef}
           selected={startDateTime}
@@ -106,7 +106,7 @@ const QuickDatePicker = () => {
         />
       </div>
       ~
-      <div style={{ display: "flex", marginTop: 8 }}>
+      <div style={{ display: "flex", marginTop: 8, color: "black" }}>
         <DatePicker
           ref={endDatePickerRef}
           selected={endDateTime}

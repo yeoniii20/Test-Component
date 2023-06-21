@@ -46,7 +46,7 @@ const OneDoubleDatePicker = () => {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div style={{ display: "flex", alignItems: "center", color: "black" }}>
       <div style={{ display: "flex" }}>
         <DatePicker
           ref={startDatePickerRef}
@@ -57,7 +57,11 @@ const OneDoubleDatePicker = () => {
           timeFormat="HH:mm"
         />
       </div>
-      <div style={{ backgroundColor: "white", paddingRight: 10 }}>~</div>
+      <div
+        style={{ backgroundColor: "white", paddingRight: 10, color: "black" }}
+      >
+        ~
+      </div>
       <div style={{ display: "flex" }}>
         <DatePicker
           ref={endDatePickerRef}

@@ -12,6 +12,10 @@ import SimpleCategoryDropdown from "@/components/dropdown/SimpleCategoryDropdown
 import MultiGroupDropdown from "@/components/dropdown/Multi/MutiGroupDropdown";
 import MultiBothSearchDropdown from "@/components/dropdown/Multi/MultiBothSearchDropdown";
 import GridDropdown from "@/components/dropdown/Grid/GridDropdown";
+import SimpleDataTimePicker1 from "@/components/timeSetting/SimpleDateTimePicker2";
+import OneDoubleDatePicker from "@/components/timeSetting/OneDoubleDatePicker";
+import DoubleCalendarWithTimePicker from "@/components/timeSetting/DoubleCalenderWithTimePicker";
+import QuickDatePicker from "@/components/timeSetting/QuickDatePicker";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -51,6 +55,12 @@ export default function Home() {
           <MultiBothSearchDropdown />
           <br />
           <GridDropdown />
+        </div>
+        <div>
+          <SimpleDataTimePicker1 />
+          <OneDoubleDatePicker />
+          <DoubleCalendarWithTimePicker />
+          <QuickDatePicker />
         </div>
         {/* <MultiGroupDropdown />
         <SimpleDropdown />
