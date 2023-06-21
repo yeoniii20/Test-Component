@@ -56,6 +56,10 @@ const GridDropdown = () => {
   const checkboxChecked = (item: TableDataItem) =>
     selectedData.some((selectedItem) => selectedItem.id === item.id);
 
+  const clearSearch = () => {
+    setSearchTerm("");
+  };
+
   return (
     <div>
       <input
@@ -64,7 +68,14 @@ const GridDropdown = () => {
         value={searchTerm}
         onChange={handleSearchChange}
         className="p-2 mb-2 border"
+        style={{ color: "black" }}
       />
+      <button
+        style={{ backgroundColor: "lightgreen", height: 41, width: 60 }}
+        onClick={clearSearch}
+      >
+        Clear
+      </button>
       <table className="w-full border-collapse">
         <thead>
           <tr style={{ backgroundColor: "grey" }}>
