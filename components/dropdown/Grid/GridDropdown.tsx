@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface TableDataItem {
   id: number;
@@ -102,8 +102,27 @@ const GridDropdown = () => {
     console.log(selectedData);
   };
 
+  // 외부 클릭했을 때 드롭다운 닫히도록 함.
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const handleOutsideClick = (event: { target: any }) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
   return (
-    <div>
+    <div
+      style={{ zIndex: 10 }}
+      ref={dropdownRef as React.RefObject<HTMLDivElement>}
+    >
       {/* 입력 창 */}
       <div
         onClick={handleDropdownVisible}
@@ -127,7 +146,7 @@ const GridDropdown = () => {
             style={{ color: "black" }}
           />
           <button
-            style={{ backgroundColor: "black", height: 41, width: 60 }}
+            style={{ backgroundColor: "black", height: 40, width: 60 }}
             onClick={clearSearch}
           >
             Clear
@@ -135,7 +154,7 @@ const GridDropdown = () => {
           <table className="w-full border-collapse">
             <thead>
               <tr style={{ backgroundColor: "grey" }}>
-                <th className="w-2">
+                <th className="w-12">
                   <input
                     type="checkbox"
                     checked={selectAll}
@@ -185,31 +204,7 @@ const GridDropdown = () => {
                 </tr>
               ))}
             </tbody>
-            <div style={{ display: "flex" }}>
-              <button
-                style={{
-                  backgroundColor: "black",
-                  height: 41,
-                  width: 60,
-                  borderRadius: 10,
-                }}
-                onClick={handleConfirm}
-              >
-                Confirm
-              </button>
-              <button
-                style={{
-                  backgroundColor: "black",
-                  height: 41,
-                  width: 60,
-                  borderRadius: 10,
-                }}
-                onClick={handleCancelClick}
-              >
-                Cancel
-              </button>
-            </div>
-            {selectedData.length > 0 && (
+            {/* {selectedData.length > 0 && (
               <div className="mt-4">
                 <h4 style={{ color: "black" }}>Selected Servers:</h4>
                 <ul>
@@ -218,8 +213,36 @@ const GridDropdown = () => {
                   ))}
                 </ul>
               </div>
-            )}
+            )} */}
           </table>
+        </div>
+      ) : (
+        <div></div>
+      )}
+      {dropdownMenu ? (
+        <div style={{ display: "flex", marginTop: 10 }}>
+          <button
+            style={{
+              backgroundColor: "black",
+              height: 40,
+              borderRadius: 10,
+              width: 80,
+            }}
+            onClick={handleConfirm}
+          >
+            Confirm
+          </button>
+          <button
+            style={{
+              backgroundColor: "black",
+              height: 40,
+              borderRadius: 10,
+              width: 80,
+            }}
+            onClick={handleCancelClick}
+          >
+            Cancel
+          </button>
         </div>
       ) : (
         <div></div>
