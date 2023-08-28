@@ -16,6 +16,7 @@ import SimpleDataTimePicker1 from "@/components/timeSetting/SimpleDateTimePicker
 import OneDoubleDatePicker from "@/components/timeSetting/OneDoubleDatePicker";
 import DoubleCalendarWithTimePicker from "@/components/timeSetting/DoubleCalenderWithTimePicker";
 import QuickDatePicker from "@/components/timeSetting/QuickDatePicker";
+import SelectQueueTopicTest from "@/components/Modal/SelectQueueTopicTest";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,42 +36,7 @@ export default function Home() {
           height: "100vh",
         }}
       >
-        <div style={{ color: "black" }}>관리자 화면 정의서 Dropdown</div>
-        <div style={{ display: "flex", gap: 30, marginBottom: 200 }}>
-          <br />
-          <SimpleDropdown />
-          <br />
-          <SimpleCategoryDropdown />
-          <br />
-          <MultiGroupDropdown />
-          <br />
-        </div>
-        <div style={{ color: "black" }}>모니터 화면 정의서 Dropdown</div>
-        <div style={{ display: "flex", gap: 30 }}>
-          <br />
-          <SingleTabulatorDropdown />
-          <br />
-          <MultiTabulatorDropdown />
-          <br />
-          <MultiBothSearchDropdown />
-          <br />
-          <GridDropdown />
-        </div>
-        <div>
-          <SimpleDataTimePicker1 />
-          <OneDoubleDatePicker />
-          <DoubleCalendarWithTimePicker />
-          <QuickDatePicker />
-        </div>
-        {/* <MultiGroupDropdown />
-        <SimpleDropdown />
-        <SimpleCategoryDropdown /> */}
-        {/* <BasicDropdown /> */}
-        {/* <SingleTabulatorDropdown /> */}
-        {/* <SingleSearchDropwon /> */}
-        {/* <MultiTabulatorDropdown /> */}
-        {/* <MultiSearchDropdown /> */}
-        {/* <SingleSelectDropdown /> */}
+        <SelectQueueTopicTest />
       </div>
     </>
   );
