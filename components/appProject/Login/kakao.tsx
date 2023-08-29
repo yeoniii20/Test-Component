@@ -11,21 +11,10 @@ const kakao = () => {
         }}
       >
         <img
-          src="/assets/Union.svg"
+          src="/assets/SUNNY.png"
           style={{
-            height: 120,
-            width: 120,
-            alignSelf: "center",
             marginTop: 75,
-          }}
-        />
-        <img
-          src="/assets/SUNNY.svg"
-          style={{
-            height: 34,
-            width: 104,
             alignSelf: "center",
-            marginTop: 16,
           }}
         />
         <div
