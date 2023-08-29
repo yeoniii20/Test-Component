@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-const Bar = () => {
+interface CustomButtonProps {
+  text: string;
+  path: string;
+}
+
+const Bar: React.FC<CustomButtonProps> = ({ text, path }) => {
   const [progress, setProgress] = useState(50);
 
   return (
@@ -8,46 +13,68 @@ const Bar = () => {
       <div
         style={{
           display: "flex",
-          flexDirection: "row",
-          placeContent: "center",
-          paddingTop: 16,
-          paddingBottom: 12,
+          flexDirection: "column",
+          marginTop: 12,
+          marginBottom: 12,
         }}
       >
+        <img
+          src={path}
+          style={{ width: 32, height: 32, alignSelf: "center" }}
+        />
         <div
           style={{
-            position: "relative",
-            width: 335,
-            height: 24,
-            borderRadius: 24,
-            border: "1.5px solid #1F1F1F",
-            overflow: "hidden",
+            color: "#1F1F1F",
+            fontSize: 20,
+            fontWeight: 700,
+            alignSelf: "center",
           }}
         >
-          {/* 주황색 배경 */}
+          {text}
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            placeContent: "center",
+            marginTop: 16,
+          }}
+        >
           <div
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              // 주황색 배경의 너비
-              width: `${progress}%`,
-              height: "100%",
-              background: "#6ADCA3",
-              borderRadius: "0 24px 24px 0",
-            }}
-          />
-          <div
-            style={{
-              marginLeft: -20,
-              fontSize: 16,
-              fontWeight: 900,
-              color: "#1F1F1F",
-              whiteSpace: "nowrap",
-              transform: "translateY(-10%) translateX(50%)",
+              position: "relative",
+              width: 335,
+              height: 24,
+              borderRadius: 24,
+              border: "1.5px solid #1F1F1F",
+              overflow: "hidden",
             }}
           >
-            NN%
+            {/* 주황색 배경 */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: `${progress}%`,
+                height: "100%",
+                background: "#6ADCA3",
+                borderRadius: "0 24px 24px 0",
+              }}
+            />
+            <div
+              style={{
+                marginLeft: -20,
+                fontSize: 16,
+                fontWeight: 900,
+                color: "#1F1F1F",
+                whiteSpace: "nowrap",
+                transform: "translateY(-10%) translateX(50%)",
+              }}
+            >
+              NN%
+            </div>
           </div>
         </div>
       </div>
