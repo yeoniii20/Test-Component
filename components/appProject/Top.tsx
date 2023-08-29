@@ -47,7 +47,7 @@ const Top = () => {
                 // 주황색 배경의 너비
                 width: `${progress}%`,
                 height: "100%",
-                background: "orange",
+                background: "#FFA851",
                 borderRadius: "0 29px 29px 0",
               }}
             />
