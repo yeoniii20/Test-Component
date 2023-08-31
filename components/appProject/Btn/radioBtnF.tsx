@@ -1,29 +1,23 @@
 const RadioBtnF = () => {
   return (
     <>
-      <div style={{ cursor: "pointer" }}>
-        <div
-          style={{
-            display: "inline-block",
-            width: "24px",
-            height: "24px",
-            backgroundColor: "white",
-            borderRadius: "50%",
-            border: "2px solid lightGrey",
-          }}
+      <div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
         >
-          <div
-            style={{
-              position: "relative",
-              top: "25%",
-              left: "25%",
-              width: "50%",
-              height: "50%",
-              backgroundColor: "lightGrey",
-              borderRadius: "50%",
-            }}
-          ></div>
-        </div>
+          <circle
+            cx="12"
+            cy="12"
+            r="11.25"
+            fill="white"
+            stroke="#C1C1C1"
+            stroke-width="1.5"
+          />
+        </svg>
       </div>
     </>
   );

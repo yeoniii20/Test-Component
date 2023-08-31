@@ -6,7 +6,7 @@ interface CustomButtonProps {
   backgroundColor?: string;
 }
 
-const LargeBtnBasic: React.FC<CustomButtonProps> = ({
+const LargeBtn: React.FC<CustomButtonProps> = ({
   text,
   onClick,
   backgroundColor,
@@ -24,7 +24,6 @@ const LargeBtnBasic: React.FC<CustomButtonProps> = ({
         height: 48,
         textAlign: "center",
         alignSelf: "center",
-        marginTop: 278,
       }}
       onClick={onClick}
     >
@@ -33,4 +32,4 @@ const LargeBtnBasic: React.FC<CustomButtonProps> = ({
   );
 };
 
-export default LargeBtnBasic;
+export default LargeBtn;

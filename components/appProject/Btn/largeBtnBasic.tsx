@@ -19,7 +19,6 @@ const LargeBtnBasic: React.FC<CustomButtonProps> = ({ text, onClick }) => {
         height: 48,
         textAlign: "center",
         alignSelf: "center",
-        marginTop: 278,
       }}
       onClick={onClick}
     >
