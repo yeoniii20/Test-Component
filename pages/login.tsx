@@ -1,5 +1,7 @@
 import Kakao from "@/components/appProject/Login/kakao";
 import SiginIn from "@/components/appProject/Login/siginIn";
+import Message from "@/components/appProject/Modal/message";
+import Note from "@/components/appProject/spendingStatus/note";
 import Statistics from "@/components/appProject/spendingStatus/statistics";
 
 const Login = () => {
@@ -34,6 +36,8 @@ const Login = () => {
           }}
         >
           <Statistics />
+          <Note />
+          <Message />
         </div>
       </div>
     </>
