@@ -60,6 +60,7 @@ const Note = () => {
                   color: "#1F1F1F",
                   paddingLeft: 10,
                   marginTop: 32,
+                  marginBottom: 8,
                 }}
               >
                 어디에 쓰셨나요?
