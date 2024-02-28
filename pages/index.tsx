@@ -17,6 +17,9 @@ import OneDoubleDatePicker from "@/components/timeSetting/OneDoubleDatePicker";
 import DoubleCalendarWithTimePicker from "@/components/timeSetting/DoubleCalenderWithTimePicker";
 import QuickDatePicker from "@/components/timeSetting/QuickDatePicker";
 import SelectQueueTopicTest from "@/components/Modal/SelectQueueTopicTest";
+import EChartsComponent from "@/components/chart/echart";
+import LineChartComponent from "@/components/chart/lineChart";
+import LineChartComponent2 from "@/components/chart/linChart2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,6 +40,11 @@ export default function Home() {
         }}
       >
         <SelectQueueTopicTest />
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          {/* <EChartsComponent /> */}
+          <LineChartComponent />
+          <LineChartComponent2 />
+        </div>
       </div>
     </>
   );
