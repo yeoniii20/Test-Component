@@ -20,6 +20,7 @@ import SelectQueueTopicTest from "@/components/Modal/SelectQueueTopicTest";
 import EChartsComponent from "@/components/chart/echart";
 import LineChartComponent from "@/components/chart/lineChart";
 import LineChartComponent2 from "@/components/chart/linChart2";
+import LineChartComponent3 from "@/components/chart/linChart3";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -42,8 +43,9 @@ export default function Home() {
         <SelectQueueTopicTest />
         <div style={{ display: "flex", flexDirection: "row" }}>
           {/* <EChartsComponent /> */}
-          <LineChartComponent />
+          {/* <LineChartComponent /> */}
           <LineChartComponent2 />
+          <LineChartComponent3 />
         </div>
       </div>
     </>
